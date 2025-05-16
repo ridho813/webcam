@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deteksi Realtime Webcam (Objek + Teks)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .video-container {
+      position: relative;
+      width: 640px;
+      height: 480px;
+      border: 4px solid #4CAF50;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+    video, canvas {
+      width: 100%;
+      height: 100%;
+    }
+    #output {
+      width: 640px;
+      background: #fff;
+      padding: 15px 20px;
+      border-left: 6px solid #2196F3;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      font-size: 16px;
+      min-height: 80px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Deteksi Webcam Realtime (Objek + Teks)</h1>
+  <div class="video-container">
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+  </div>
+  <div id="output">Menunggu deteksi...</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const output = document.getElementById('output');
+
+    // Minta akses webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+        video.play();
+
+        // Kirim frame ke server tiap 2 detik
+        setInterval(() => {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = canvas.toDataURL('image/jpeg');
+          socket.emit('webcam-data', imageData);
+        }, 2000);
+      })
+      .catch(err => {
+        console.error('Webcam error:', err);
+        output.innerText = 'Gagal mengakses webcam.';
+      });
+
+    // Terima data deteksi dari server
+    socket.on('detection-data', (data) => {
+      const objects = data.objects.length ? data.objects.join(', ') : 'Tidak terdeteksi';
+      const text = data.text || 'Tidak terbaca';
+      output.innerText = `📦 Objek: ${objects}\n🔤 Tulisan: ${text}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name": "be-rotator",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^1.6.8",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.21.2",
+    "helmet": "^7.2.0",
+    "mustache": "^4.2.0",
+    "mysql2": "^3.2.0",
+    "nocache": "^4.0.0",
+    "nodemailer": "^6.9.7",
+    "nodemon": "^3.1.10",
+    "socket.io": "^4.8.1",
+    "ua-parser-js": "^1.0.37"
+  },
+  "dependencies": {
+    "@tensorflow-models/blazeface": "^0.1.0",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow-models/mobilenet": "^2.1.1",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "@whiskeysockets/baileys": "^6.17.16",
+    "canvas": "^3.1.0",
+    "cookie-parser": "^1.4.6",
+    "fs-extra": "^11.3.0",
+    "qrcode-terminal": "^0.12.0",
+    "tesseract.js": "^6.0.1",
+    "uuid": "^11.1.0"
+  },
+  "description": ""
+}
